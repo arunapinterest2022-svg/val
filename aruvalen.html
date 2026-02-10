@@ -1,0 +1,235 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Valentine</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+    margin: 0; padding: 0;
+    height: 100%; width: 100%;
+    overflow: hidden;
+    font-family: 'Press Start 2P', monospace;
+    background: black;
+    position: relative;
+}
+
+/* Основной фон */
+.main-bg {
+    position: absolute;
+    inset: 0;
+    background: url("pixcelart.jpg") center/cover no-repeat;
+    z-index: 0;
+    filter: brightness(0.5);
+}
+
+/* Верхний фон фото над надписями */
+.top-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%; /* регулируем высоту */
+    z-index: 1;
+}
+
+/* Мерцающие звёзды */
+.star {
+    position: absolute;
+    color: white;
+    font-size: 6px;
+    opacity: 0.8;
+    animation: twinkle 2s infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:0.8;} 50%{opacity:0.2;} }
+
+/* Главный экран */
+.game-screen {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height:100%;
+    
+}
+
+.game-screen h1 {
+    font-size: 30px;
+    margin: 20px 0;
+}
+
+.button-group { margin-top: 20px; }
+
+/* Кнопки */
+.play-btn {
+    padding: 16px 24px;
+    background: #ff5fa2;
+    border: 3px solid white;
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    margin: 0 5px;
+    animation: glow 1.2s infinite alternate;
+}
+.play-btn:hover { background: #ff2f88; }
+
+@keyframes glow {
+    0% { text-shadow: 0 0 5px #fff; }
+    50% { text-shadow: 0 0 15px #ff9acc; }
+    100% { text-shadow: 0 0 5px #fff; }
+}
+
+/* Фото и музыка сцена */
+.photo-scene, .music-scene {
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.85);
+    justify-content:center;
+    align-items:center;
+    z-index: 5;
+    flex-direction: column;
+}
+
+.photo-box, .music-box {
+    background:white;
+    padding:14px;
+    border-radius:10px;
+    max-width:90%;
+    text-align:center;
+    animation: fadeIn 1s ease;
+}
+
+.photo-box img { 
+    width:100%; 
+    max-width: 350px;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 0 12px rgba(255,105,180,0.7);
+}
+
+.caption { margin-top:10px; color:#ff4f9a; font-size:12px; }
+.photo-box p { font-size:12px; margin-top:6px; }
+
+@keyframes fadeIn { from{opacity:0; transform:scale(0.9);} to{opacity:1; transform:scale(1);} }
+
+.back-btn {
+    margin-top:12px;
+    padding: 14px 22px;
+    background: #5fdfff;
+    border: 3px solid white;
+    color: black;
+    font-family: 'Press Start 2P', monospace;
+    font-size:12px;
+    cursor:pointer;
+    animation: glowBack 1.5s infinite alternate;
+}
+@keyframes glowBack {
+    0% { text-shadow: 0 0 5px #fff; }
+    50% { text-shadow: 0 0 12px #5fdfff; }
+    100% { text-shadow: 0 0 5px #fff; }
+}
+
+meta[name="viewport"] { width=device-width; initial-scale=1.0, maximum-scale=1.0, user-scalable=no; }
+</style>
+</head>
+
+<body>
+
+<!-- Фоны -->
+<div class="main-bg"></div>
+<div class="top-bg"></div>
+
+<!-- Мерцающие звёзды -->
+<script>
+const starCount = 50;
+for(let i=0;i<starCount;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.left=Math.random()*100+'vw';
+    s.style.top=Math.random()*100+'vh';
+    s.style.fontSize=(2+Math.random()*4)+'px';
+    s.style.animationDuration=(1+Math.random()*2)+'s';
+    s.innerHTML='✦';
+    document.body.appendChild(s);
+}
+</script>
+
+<!-- Главный экран -->
+<div class="game-screen">
+    <h1>FOR MY VALENTINE,</h1>
+    <h1>ALWAYS ♡</h1>
+    <div class="button-group">
+        <button class="play-btn" onclick="openPhoto()">Письмо</button>
+        <button class="play-btn" onclick="playMusicScene()">Песни</button>
+    </div>
+</div>
+
+<!-- Фото & письмо -->
+<div class="photo-scene" id="photoScene">
+    <div class="photo-box">
+        <img src="myphoto.jpg" alt="Us">
+        <div class="caption">Forever with you ♡</div>
+        <p>Я тебя очень сильно люблю. Хочу сказать спасибо за то что, делаешь меня счастливой. Я очень ценю это. И поздравляю с 14 февраля. You are my valentine 💌</p>
+        <button class="back-btn" onclick="closePhoto()">Назад</button>
+    </div>
+</div>
+
+<!-- Музыкальная сцена -->
+<div class="music-scene" id="musicScene">
+    <div class="music-box">
+        <p>Romantic Playlist ♡</p>
+        <audio id="musicPlayer" controls></audio>
+        <div style="margin-top:5px;">
+            <button onclick="prevSong()" class="play-btn">Играть</button>
+            <button onclick="nextSong()" class="play-btn">Следующее</button>
+        </div>
+        <button class="back-btn" onclick="closeMusic()">Назад</button>
+    </div>
+</div>
+
+<script>
+// Локальные mp3 файлы
+const songs = [
+    "kaspiy_love.mp3",
+    "compass.mp3",
+    "kaitadan.mp3"
+];
+let currentSong = 0;
+const player = document.getElementById("musicPlayer");
+
+function playMusicScene(){
+    document.getElementById("musicScene").style.display="flex";
+    player.src = songs[currentSong];
+    player.play().catch(() => {
+        alert("Нажмите Play на плеере, чтобы включить музыку на iPhone Chrome/Safari.");
+    });
+}
+function closeMusic(){
+    document.getElementById("musicScene").style.display="none";
+    player.pause();
+}
+function nextSong(){
+    currentSong=(currentSong+1)%songs.length;
+    player.src=songs[currentSong];
+    player.play();
+}
+function prevSong(){
+    currentSong=(currentSong-1+songs.length)%songs.length;
+    player.src=songs[currentSong];
+    player.play();
+}
+
+// Фото
+function openPhoto(){ document.getElementById("photoScene").style.display="flex"; }
+function closePhoto(){ document.getElementById("photoScene").style.display="none"; }
+</script>
+
+</body>
+</html>
